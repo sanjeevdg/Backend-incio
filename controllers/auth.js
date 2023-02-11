@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const sequelize = require('../utils/database.js');
 const GlossaryTerm = require('../models/glossaryterm.js');
 const MeetingEvent = require('../models/meetingevent.js');
+const Client = require('../models/client.js');
 
 
 const tokens = [];
@@ -91,6 +92,43 @@ catch (e) {
 return res;
 };
 
+
+const addNewClient = async (req,res,next) => {
+
+try {
+let response = await Client.create({                        
+                        name: req.body.name,
+						email:req.body.email,
+						phone:req.body.phone,
+						address:req.body.address,
+						zip:req.body.zip,
+                      	country: req.body.country,
+                        cname: req.body.cname,
+						cemail:req.body.cemail,
+						cphone:req.body.cphone,
+						caddress:req.body.caddress,
+						czip:req.body.czip,
+                      	ccountry: req.body.ccountry                       
+                       
+                    });
+if (response) {
+console.log('within if response');
+res.status(200).json({"newClient":response});
+}
+else { res.status(500).json({"message":"new client create error"});}
+}
+catch (e) {
+
+    console.log('newerror is:'+e.message);
+    res.status().json({"message":"try reporting error occur"});
+
+
+} 
+
+
+return res;
+};
+
 const addMeetingEvent = async (req,res,next) => {
 
 try {
@@ -152,4 +190,4 @@ return res;
 };
 
 
-module.exports = {dropMeetingEvents,addMeetingEvent,addGlossaryTerm,editGlossaryTerm,deleteGlossaryTerm, getTermById,getTermsList} ;
+module.exports = {addNewClient,dropMeetingEvents,addMeetingEvent,addGlossaryTerm,editGlossaryTerm,deleteGlossaryTerm, getTermById,getTermsList} ;
