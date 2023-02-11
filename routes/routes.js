@@ -1,7 +1,7 @@
 const express =require('express');
 
 
-const {dropMeetingEvents,addMeetingEvent,addGlossaryTerm,editGlossaryTerm,deleteGlossaryTerm,getTermById,getTermsList} = require('../controllers/auth');
+const {addNewClient,dropMeetingEvents,addMeetingEvent,addGlossaryTerm,editGlossaryTerm,deleteGlossaryTerm,getTermById,getTermsList} = require('../controllers/auth');
  
 
 const router = express.Router();
@@ -21,6 +21,12 @@ router.post('/getTermsList', async function(req, res,next){
 router.post('/dropMeetingEvents', async function(req, res,next){
     console.log('router enter sf');
  dropMeetingEvents(req, res,next);
+});
+
+
+router.post('/addNewClient', async function(req, res,next){
+    console.log('router enter sf');
+ addNewClient(req, res,next);
 });
 
 
