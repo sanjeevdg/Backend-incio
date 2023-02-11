@@ -14,15 +14,15 @@ const Client = sequelize.define('clients', {
       allowNull: false,
    },
       email: {
-      type: Sequelize.DATE,
+      type: Sequelize.STRING,
       allowNull: false,
    },
 	  zip: {
-      type: Sequelize.DATE,
+      type: Sequelize.STRING,
       allowNull: false,
    },
       address: {
-      type: Sequelize.STRING,
+      type: Sequelize.TEXT,
       allowNull: false,
    },
       phone: {
@@ -30,7 +30,7 @@ const Client = sequelize.define('clients', {
       allowNull: false,
    },
 	  country: {
-	     type: Sequelize.TEXT,
+	     type: Sequelize.STRING,
       allowNull: true,
    },
       cname: {
@@ -38,15 +38,15 @@ const Client = sequelize.define('clients', {
       allowNull: false,
    },
       cemail: {
-      type: Sequelize.DATE,
+      type: Sequelize.STRING,
       allowNull: false,
    },
 	  czip: {
-      type: Sequelize.DATE,
+      type: Sequelize.STRING,
       allowNull: false,
    },
       caddress: {
-      type: Sequelize.STRING,
+      type: Sequelize.TEXT,
       allowNull: false,
    },
       cphone: {
@@ -54,7 +54,7 @@ const Client = sequelize.define('clients', {
       allowNull: false,
    },
 	  ccountry: {
-	     type: Sequelize.TEXT,
+	     type: Sequelize.STRING,
       allowNull: true,
 },
 
