@@ -9,15 +9,15 @@ const Client = require('../models/client.js');
 const tokens = [];
 
 
-const getTermsList = async (req,res,next) => {
+const getClientsList = async (req,res,next) => {
 
-var query = "select id,term,termdesc from glossaryterms";
+var query = "select * from clients";
 console.log('uery is'+query);
 const [results, metadata] = await sequelize.query(query);
 
 
 if (results) {
-res.status(200).json({"myterms":results})
+res.status(200).json({"myclients":results})
 
 }
 
@@ -39,7 +39,7 @@ res.status(200).json({"message":"Glossary Term delete success."})
 
 const dropMeetingEvents = async (req,res,next) => {
 
-var query = "drop table meetingevents";
+var query = "drop table clients";
 console.log('uery is'+query);
 const [results, metadata] = await sequelize.query(query);
 
@@ -160,21 +160,31 @@ return res;
 
 
 
-const editGlossaryTerm = async (req,res,next) => {
+const editClient = async (req,res,next) => {
 
 try {
-let response = await GlossaryTerm.update({                        
-                        term: req.body.term,
-                      termdesc: req.body.termdesc                       
+let response = await Client.update({                        
+                       name: req.body.name,
+						email:req.body.email,
+						phone:req.body.phone,
+						address:req.body.address,
+						zip:req.body.zip,
+                      	country: req.body.country,
+                        cname: req.body.cname,
+						cemail:req.body.cemail,
+						cphone:req.body.cphone,
+						caddress:req.body.caddress,
+						czip:req.body.czip,
+                      	ccountry: req.body.ccountry                       
                     },   {
     where: {
-    id: req.body.termid   
+    id: req.body.clientid   
   }
 });
 
 if (response) {
 console.log('within if response');
-res.status(200).json({"glossaryterm":response});
+res.status(200).json({"editedClient":response});
 }
 else { res.status(500).json({"message":"glossary term error"});}
 }
@@ -190,4 +200,4 @@ return res;
 };
 
 
-module.exports = {addNewClient,dropMeetingEvents,addMeetingEvent,addGlossaryTerm,editGlossaryTerm,deleteGlossaryTerm, getTermById,getTermsList} ;
+module.exports = {editClient, addNewClient,dropMeetingEvents,addMeetingEvent,addGlossaryTerm,deleteGlossaryTerm, getTermById,getClientsList} ;
