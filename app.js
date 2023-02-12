@@ -2,7 +2,7 @@ const express = require("express");
 const http = require("http");
 const sequelize = require('./utils/database.js');
 var cors = require('cors');
-
+const multer = require('multer');
 
 const router = require('./routes/routes.js');
 const bodyParser = require("body-parser");
@@ -30,6 +30,23 @@ app.use((_, res, next) => {
     next();
 });
 
+
+
+
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'images/')
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.originalname)
+  },
+})
+
+const upload = multer({ storage: storage })
+
+
+
 var corsOptions = {
   origin: "*"
 };
@@ -39,6 +56,10 @@ app.use(router);
 
 app.use('/appdemo', express.static(__dirname + '/appdemo'));
 
+app.post('/uploadProfileImage', upload.single('file'), function (req, res) {
+    console.log('hit imgupl endpoint');
+  res.json({'message':'ok'})
+});
 
 sequelize.sync(); 
 
