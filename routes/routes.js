@@ -1,7 +1,7 @@
 const express =require('express');
 
 
-const {addNewClient,dropMeetingEvents,addMeetingEvent,addGlossaryTerm,editGlossaryTerm,deleteGlossaryTerm,getTermById,getTermsList} = require('../controllers/auth');
+const {editClient, getClientsList, addNewClient,dropMeetingEvents,addMeetingEvent,addGlossaryTerm,editGlossaryTerm,deleteGlossaryTerm,getTermById,getTermsList} = require('../controllers/auth');
  
 
 const router = express.Router();
@@ -12,9 +12,9 @@ router.post('/getTermById',function(req, res,next){
      getTermById(req, res,next);
 } );
 
-router.post('/getTermsList', async function(req, res,next){
+router.post('/getClientsList', async function(req, res,next){
     console.log('router enter sf');
- getTermsList(req, res,next);
+ getClientsList(req, res,next);
 } );
 
 
@@ -40,9 +40,9 @@ router.post('/addGlossaryTerm', async function(req, res,next){
  addGlossaryTerm(req, res,next);
 });
 
-router.post('/editGlossaryTerm', async function(req, res,next){
+router.post('/editClient', async function(req, res,next){
     console.log('router enter sf');
- editGlossaryTerm(req, res,next);
+ editClient(req, res,next);
 });
 
 router.post('/deleteGlossaryTerm', async function(req, res,next){
