@@ -1,11 +1,27 @@
 const express =require('express');
+ const multer = require('multer');
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'images/')
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.originalname)
+  },
+})
 
+const upload = multer({ storage: storage })
 
 const {editClient, getClientsList, addNewClient,dropMeetingEvents,addMeetingEvent,addGlossaryTerm,editGlossaryTerm,deleteGlossaryTerm,getTermById,getTermsList} = require('../controllers/auth');
  
 
 const router = express.Router();
 
+
+router.post('/uploadProfileImage', upload.single('file'), function (req, res) {
+    console.log('hit imgupl endpoint');
+    // updateClientRecordWithProfilePicture
+  res.json({'message':'ok'})
+});
 
 
 router.post('/getTermById',function(req, res,next){
