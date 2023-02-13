@@ -4,7 +4,7 @@ const sequelize = require('../utils/database.js');
 const GlossaryTerm = require('../models/glossaryterm.js');
 const MeetingEvent = require('../models/meetingevent.js');
 const Client = require('../models/client.js');
-
+const Event = require('../models/event.js');
 
 const tokens = [];
 
@@ -23,6 +23,19 @@ res.status(200).json({"myclients":results})
 
 };
 
+const getEventsList = async (req,res,next) => {
+
+var query = "select * from events";
+console.log('uery is'+query);
+const [results, metadata] = await sequelize.query(query);
+
+
+if (results) {
+res.status(200).json({"myevents":results})
+
+}
+
+};
 
 const deleteGlossaryTerm = async (req,res,next) => {
 
@@ -88,6 +101,38 @@ catch (e) {
 
 
 } 
+
+return res;
+};
+
+
+const addNewEvent = async (req,res,next) => {
+
+try {
+let response = await Event.create({                        
+                        name: req.body.name,
+						location:req.body.location,
+						description:req.body.description,
+						uniquelink:req.body.uniquelink,
+						mstart:req.body.mstart,
+                      	duration: req.body.duration,
+                        people: req.body.people,						
+                       
+                    });
+if (response) {
+console.log('within if response');
+res.status(200).json({"newEvent":response});
+}
+else { res.status(500).json({"message":"new event create error"});}
+}
+catch (e) {
+
+    console.log('newerror is:'+e.message);
+    res.status().json({"message":"try reporting error occur"});
+
+
+} 
+
 
 return res;
 };
@@ -200,4 +245,4 @@ return res;
 };
 
 
-module.exports = {editClient, addNewClient,dropMeetingEvents,addMeetingEvent,addGlossaryTerm,deleteGlossaryTerm, getTermById,getClientsList} ;
+module.exports = {getEventsList,addNewEvent,editClient, addNewClient,dropMeetingEvents,addMeetingEvent,addGlossaryTerm,deleteGlossaryTerm, getTermById,getClientsList} ;
