@@ -11,7 +11,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage })
 
-const {editClient, getClientsList, addNewClient,dropMeetingEvents,addMeetingEvent,addGlossaryTerm,editGlossaryTerm,deleteGlossaryTerm,getTermById,getTermsList} = require('../controllers/auth');
+const {getEventsList,addNewEvent,editClient, getClientsList, addNewClient,dropMeetingEvents,addMeetingEvent,addGlossaryTerm,editGlossaryTerm,deleteGlossaryTerm,getTermById,getTermsList} = require('../controllers/auth');
  
 
 const router = express.Router();
@@ -33,10 +33,18 @@ router.post('/getClientsList', async function(req, res,next){
  getClientsList(req, res,next);
 } );
 
-
+router.post('/getEventsList', async function(req, res,next){
+    console.log('router enter sf');
+ getEventsList(req, res,next);
+} );
 router.post('/dropMeetingEvents', async function(req, res,next){
     console.log('router enter sf');
  dropMeetingEvents(req, res,next);
+});
+
+router.post('/addNewEvent', async function(req, res,next){
+    console.log('router enter sf');
+ addNewEvent(req, res,next);
 });
 
 
