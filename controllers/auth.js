@@ -153,8 +153,13 @@ let response = await Client.create({
 						cphone:req.body.cphone,
 						caddress:req.body.caddress,
 						czip:req.body.czip,
-                      	ccountry: req.body.ccountry                       
-                       
+                      	ccountry: req.body.ccountry,
+                      	profilephoto:req.body.profilephoto,                     
+                      	companylogo:req.body.companylogo,
+                      	role:req.body.role,
+                      	ccno:req.body.ccno,
+                      	ccexp:req.body.ccexp,
+                      	cccvv:req.body.cccvv                       
                     });
 if (response) {
 console.log('within if response');
@@ -220,7 +225,13 @@ let response = await Client.update({
 						cphone:req.body.cphone,
 						caddress:req.body.caddress,
 						czip:req.body.czip,
-                      	ccountry: req.body.ccountry                       
+                      	ccountry: req.body.ccountry,
+                      	profilephoto:req.body.profilephoto,
+                      	companylogo:req.body.companylogo,
+                      	role:req.body.role,
+                      	ccno:req.body.ccno,
+                      	ccexp:req.body.ccexp,
+                      	cccvv:req.body.cccvv                      
                     },   {
     where: {
     id: req.body.clientid   
