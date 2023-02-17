@@ -57,9 +57,31 @@ const Client = sequelize.define('clients', {
 	     type: Sequelize.STRING,
       allowNull: true,
 },
+profilephoto: {
+        type: Sequelize.TEXT,
+      allowNull: true,
+},
+companylogo: {
+        type: Sequelize.TEXT,
+      allowNull: true,
+},
+role: {
+        type: Sequelize.STRING,
+      allowNull: true,
+},
 
-
-   
+ccno: {
+        type: Sequelize.STRING,
+      allowNull: true,
+},
+ccexp: {
+        type: Sequelize.STRING,
+      allowNull: true,
+},
+cccvv: {
+        type: Sequelize.STRING,
+      allowNull: true,
+},   
 });
 
 
