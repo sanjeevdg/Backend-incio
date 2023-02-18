@@ -50,9 +50,60 @@ res.status(200).json({"message":"Glossary Term delete success."})
 
 };
 
+
+const editEvent = async (req,res,next) => {
+
+
+try {
+let response = await Event.update({                        
+                       name: req.body.name,
+						location:req.body.location,
+						description:req.body.description,
+						uniquelink:req.body.uniquelink,
+						mstart:req.body.mstart,
+                      	duration: req.body.duration,
+                        people: req.body.people,
+						rptmon:req.body.rptmon,
+						rpttue:req.body.rpttue,
+						rptwed:req.body.rptwed,
+						rptthu:req.body.rptthu,
+                      	rptfri: req.body.rptfri,
+                      	rptsat:req.body.rptsat,
+                      	rptsun:req.body.rptsun,
+                      	
+                    },   {
+    where: {
+    id: req.body.event_id   
+  }
+});
+
+if (response) {
+console.log('within if response');
+res.status(200).json({"editedEvent":response});
+}
+else { res.status(500).json({"message":"edit event error"});}
+}
+catch (e) {
+
+    console.log('editevent newerror is:'+e.message);
+    res.status().json({"message":"editevent try reporting error occur"});
+
+
+} 
+
+return res;
+
+
+
+
+
+};
+
+
+
 const dropMeetingEvents = async (req,res,next) => {
 
-var query = "drop table clients";
+var query = "drop table events";
 console.log('uery is'+query);
 const [results, metadata] = await sequelize.query(query);
 
@@ -116,7 +167,14 @@ let response = await Event.create({
 						uniquelink:req.body.uniquelink,
 						mstart:req.body.mstart,
                       	duration: req.body.duration,
-                        people: req.body.people,						
+                        people: req.body.people,
+                        rptmon:req.body.rptmon,
+                        rpttue:req.body.rpttue,
+                        rptwed:req.body.rptwed,
+                        rptthu:req.body.rptthu,
+                        rptfri:req.body.rptfri,
+                        rptsat:req.body.rptsat,
+                        rptsun:req.body.rptsun
                        
                     });
 if (response) {
@@ -256,4 +314,4 @@ return res;
 };
 
 
-module.exports = {getEventsList,addNewEvent,editClient, addNewClient,dropMeetingEvents,addMeetingEvent,addGlossaryTerm,deleteGlossaryTerm, getTermById,getClientsList} ;
+module.exports = {editEvent,getEventsList,addNewEvent,editClient, addNewClient,dropMeetingEvents,addMeetingEvent,addGlossaryTerm,deleteGlossaryTerm, getTermById,getClientsList} ;
