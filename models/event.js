@@ -26,7 +26,7 @@ const Event = sequelize.define('events', {
       allowNull: true,
    },
       mstart: {
-      type: Sequelize.STRING,
+      type: Sequelize.DATE,
       allowNull: false,
    },
 	  duration: {
@@ -37,9 +37,34 @@ const Event = sequelize.define('events', {
       type: Sequelize.STRING,
       allowNull: true,
    },
-      
-
-   
+   rptmon: {
+      type:Sequelize.BOOLEAN,
+      defaultValue:false
+   },   
+rpttue: {
+      type:Sequelize.BOOLEAN,
+      defaultValue:false
+   },
+   rptwed: {
+      type:Sequelize.BOOLEAN,
+      defaultValue:false
+   },
+   rptthu: {
+      type:Sequelize.BOOLEAN,
+      defaultValue:false
+   },
+   rptfri: {
+      type:Sequelize.BOOLEAN,
+      defaultValue:false
+   },
+   rptsat: {
+      type:Sequelize.BOOLEAN,
+      defaultValue:false
+   },
+   rptsun: {
+      type:Sequelize.BOOLEAN,
+      defaultValue:false
+   }
 });
 
 
