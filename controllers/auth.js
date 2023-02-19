@@ -5,6 +5,7 @@ const GlossaryTerm = require('../models/glossaryterm.js');
 const MeetingEvent = require('../models/meetingevent.js');
 const Client = require('../models/client.js');
 const Event = require('../models/event.js');
+const User = require('../models/user.js');
 
 const tokens = [];
 
@@ -37,6 +38,23 @@ res.status(200).json({"myevents":results})
 
 };
 
+
+
+const getAllUsers = async (req,res,next) => {
+
+var query = "select * from users";
+console.log('uery is'+query);
+const [results, metadata] = await sequelize.query(query);
+
+
+if (results) {
+res.status(200).json({"myusers":results})
+
+}
+
+};
+
+
 const deleteGlossaryTerm = async (req,res,next) => {
 
 var query = "delete from glossaryterms where id="+req.body.termid;
@@ -53,6 +71,7 @@ res.status(200).json({"message":"Glossary Term delete success."})
 
 const editEvent = async (req,res,next) => {
 
+let peoplearr =  req.body.people.split(',');
 
 try {
 let response = await Event.update({                        
@@ -62,7 +81,7 @@ let response = await Event.update({
 						uniquelink:req.body.uniquelink,
 						mstart:req.body.mstart,
                       	duration: req.body.duration,
-                        people: req.body.people,
+                        people: peoplearr,
 						rptmon:req.body.rptmon,
 						rpttue:req.body.rpttue,
 						rptwed:req.body.rptwed,
@@ -159,7 +178,12 @@ return res;
 
 const addNewEvent = async (req,res,next) => {
 
+console.log('received people value'+req.body.people);
+console.log('typeof received people value'+typeof(req.body.people));
 try {
+
+	let peoplearr =  req.body.people.split(',');
+
 let response = await Event.create({                        
                         name: req.body.name,
 						location:req.body.location,
@@ -167,7 +191,7 @@ let response = await Event.create({
 						uniquelink:req.body.uniquelink,
 						mstart:req.body.mstart,
                       	duration: req.body.duration,
-                        people: req.body.people,
+                        people:peoplearr,
                         rptmon:req.body.rptmon,
                         rpttue:req.body.rpttue,
                         rptwed:req.body.rptwed,
@@ -314,4 +338,81 @@ return res;
 };
 
 
-module.exports = {editEvent,getEventsList,addNewEvent,editClient, addNewClient,dropMeetingEvents,addMeetingEvent,addGlossaryTerm,deleteGlossaryTerm, getTermById,getClientsList} ;
+const checkEmailExists = (req, res, next) => {
+    // checks if email already exists
+    //'san@san.com'
+     console.log('entering method fndOne::::::::::::::');
+    User.findOne({ where : {
+        email:req.body.email, 
+    }})
+    .then(dbUser => {
+        console.log('entered then clause.................');
+        if (dbUser) {
+            console.log('this is email already exists message after querying db');
+            return res.status(200).json({message: "email already exists"});
+        } else {
+        	return res.status(200).json({message: "email can be used"});	
+
+        }
+}).catch(err => {
+        console.log('error', err);
+    });
+};
+ 
+
+
+const createUser = (req, res, next) => {
+    // checks if email already exists
+    //'san@san.com'
+     console.log('entering method fndOne::::::::::::::');
+    User.findOne({ where : {
+        email:req.body.email, 
+    }})
+    .then(dbUser => {
+        console.log('entered then clause.................');
+        if (dbUser) {
+            console.log('this is email already exists message after querying db');
+                        
+            
+            
+            
+          //  return res.status(409).json({message: "email already exists"});
+        } else if (!dbUser && req.body.email && req.body.password) {
+            // password hash
+       console.log('attemoting to hash password');
+            
+            bcrypt.hash(req.body.password, 12, (err, passwordHash) => {
+                if (err) {
+                    return res.status(500).json({message: "couldnt hash the password"}); 
+                } else if (passwordHash) {
+                    return User.create(({
+                        email: req.body.email,
+                        name: req.body.name,
+                        password: passwordHash,
+                       	fireb_uid:req.body.fireb_uid,
+                        regtoken:req.body.regtoken,                      
+                    }))
+                    .then(() => {
+                        res.status(200).json({message: "user created"});
+                    })
+                    .catch(err => {
+                        console.log('signup error message is:::::'+err);
+                        res.status(502).json({message: "error while creating the user"});
+                    });
+                };
+            });
+        } else if (!req.body.password) {
+            return res.status(400).json({message: "password not provided"});
+        } else if (!req.body.email) {
+            return res.status(400).json({message: "email not provided"});
+        };
+    })
+    .catch(err => {
+        console.log('error', err);
+    });
+};
+
+
+
+
+module.exports = {getAllUsers,checkEmailExists,createUser,editEvent,getEventsList,addNewEvent,editClient, addNewClient,dropMeetingEvents,addMeetingEvent,addGlossaryTerm,deleteGlossaryTerm, getTermById,getClientsList} ;
