@@ -34,7 +34,7 @@ const Event = sequelize.define('events', {
       allowNull: true,
    },
       people: {
-      type: Sequelize.STRING,
+      type: Sequelize.ARRAY(Sequelize.STRING),
       allowNull: true,
    },
    rptmon: {
