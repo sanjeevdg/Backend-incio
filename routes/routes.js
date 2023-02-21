@@ -1,5 +1,13 @@
 const express =require('express');
  const multer = require('multer');
+
+const sequelize = require('../utils/database.js');
+
+const Event = require('../models/event.js');
+
+
+
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, 'images/')
@@ -17,7 +25,7 @@ const Meeting = require('google-meet-api').meet;
 
 
 
-const {getAllUsers,checkEmailExists,createUser,editEvent, getEventsList,addNewEvent,editClient, getClientsList, addNewClient,dropMeetingEvents,addMeetingEvent,addGlossaryTerm,editGlossaryTerm,deleteGlossaryTerm,getTermById,getTermsList} = require('../controllers/auth');
+const {preinit,getAllUsers,checkEmailExists,createUser,editEvent, getEventsList,addNewEvent,editClient, getClientsList, addNewClient,dropMeetingEvents,addMeetingEvent,addGlossaryTerm,editGlossaryTerm,deleteGlossaryTerm,getTermById,getTermsList} = require('../controllers/auth');
  
 
 const router = express.Router();
@@ -109,33 +117,94 @@ router.post('/deleteGlossaryTerm', async function(req, res,next){
 
 let clientID = "593436295572-fm9krcm5lg4u7kv70dkchm6fk9n0q0f5.apps.googleusercontent.com";
 let clientSecret="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";
-let meetlink = 'sss';
+var gmeetlink = '';
+var gmdate = '';
+var gmtime = '';
+var gmsumm = '';
+var gmloc = '';
+var gmdesc = '';
+var evtid = '';
+
+router.post('/preinit',function(req,res,next){
+
+gmdate= req.body.gmdate;
+gmtime = req.body.gmtime;
+gmsumm = req.body.name;
+gmloc = req.body.location;
+gmdesc = req.body.description;
+evtid = req.body.event_id;
+
+console.log(gmdate+'..'+gmtime+'...'+gmsumm+'...'+gmloc+'...'+gmdesc+'...'+evtid);
+
+
+  res.json({'message':'ok'});
+   // return res.redirect('http://localhost:5000/auth/google');
+});
 
 passport.use(new GoogleStrategy({
     clientID: clientID,
     clientSecret: clientSecret,
-    callbackURL: "http://localhost:5000/auth/callback"
+    callbackURL: "https://backend-incio.onrender.com/auth/callback"
 },
     function (accessToken, refreshToken, profile, cb) {
         Meeting({
             clientId: clientID,
             clientSecret: clientSecret,
             refreshToken: refreshToken,
-            date: "2023-02-14",
-            time: "10:59",
-            summary: 'summary',
-            location: 'location',
-            description: 'description',
+            date: gmdate,
+            time: gmtime,
+            summary: gmsumm,
+            location: gmloc,
+            description: gmdesc,
             checking:0
-        }).then(function (result) {
-            meetlink = result;
+        }).then(async function (result) {
+            gmeetlink = result;
+
+if (gmeetlink !=='') {
+
+
+let response = await Event.update({                        
+                        uniquelink:gmeetlink,                        
+                    },   {
+    where: {
+    id: evtid   
+  }
+});
+
+if (response) {
+console.log('within if response');
+//res.status(200).json({"editedEvent":response});
+}
+else { //res.status(500).json({"message":"getting gmeetlink error"});
+}
+
+
+}
+
+else {
+
+    res.status(200).json({"adding gmeetlink error - calendar is already booked":response});
+}
+
+
+
             console.log('myresult>>>>>>>>>>>',result);
         }).catch((error) => {
             console.log(error)
         });
+
+
+
+
+
+
         return cb();
     }
 ));
+
+
+
+
 
 router.get('/auth/callback',
     passport.authenticate('google', { failureRedirect: '/' })
@@ -150,8 +219,12 @@ router.get('/auth/google',
     ));
 
 router.get('/',function(req,res){
-    res.send("done"+meetlink)
-})
+    // res.send("done"+gmeetlink);
+    //res.json({'message':'ok'});
+    return res.redirect('http://localhost:3000/meetings');
+});
+
+
 
 
 
