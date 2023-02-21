@@ -221,7 +221,7 @@ router.get('/auth/google',
 router.get('/',function(req,res){
     // res.send("done"+gmeetlink);
     //res.json({'message':'ok'});
-    return res.redirect('http://localhost:3000/meetings');
+    return res.redirect('https://elegant-lamington-189e62.netlify.app/meetings');
 });
 
 
