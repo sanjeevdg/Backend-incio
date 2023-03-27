@@ -39,7 +39,7 @@ router.post('/uploadProfileImage', upload.single('file'), function (req, res) {
 
 
 router.post('/loginUser',function(req, res,next){
-     checkEmailExists(req, res,next);
+     loginUser(req, res,next);
 } );
 
 
