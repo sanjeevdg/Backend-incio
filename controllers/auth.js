@@ -23,6 +23,32 @@ res.status(200).json({"myclients":results})
 }
 
 };
+const loginUser = (req, res, next) => {
+    // checks if email exists
+    User.findOne({ where : {
+        email: req.body.email, 
+    }})
+    .then(dbUser => {
+        if (!dbUser) {
+            return res.status(404).json({message: "user not found"});
+        } else {
+            // password hash
+            bcrypt.compare(req.body.password, dbUser.password, (err, compareRes) => {
+                if (err) { // error while comparing
+                    res.status(502).json({message: "error while checking user password"});
+                } else if (compareRes) { // password match
+                    const token = jwt.sign({ phone: req.body.phone }, 'secret', { expiresIn: '1h' });
+                    res.status(200).json({message: "user logged in", "token": token,"uid":dbUser.id,"usrph":dbUser.phone,"user":dbUser});
+                } else { // password doesnt match
+                    res.status(401).json({message: "invalid credentials"});
+                };
+            });
+        };
+    })
+    .catch(err => {
+        console.log('error', err);
+    });
+};
 
 const getEventsList = async (req,res,next) => {
 
@@ -415,4 +441,4 @@ const createUser = (req, res, next) => {
 
 
 
-module.exports = {getAllUsers,checkEmailExists,createUser,editEvent,getEventsList,addNewEvent,editClient, addNewClient,dropMeetingEvents,addMeetingEvent,addGlossaryTerm,deleteGlossaryTerm, getTermById,getClientsList} ;
+module.exports = {loginUser,getAllUsers,checkEmailExists,createUser,editEvent,getEventsList,addNewEvent,editClient, addNewClient,dropMeetingEvents,addMeetingEvent,addGlossaryTerm,deleteGlossaryTerm, getTermById,getClientsList} ;
