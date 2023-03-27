@@ -25,7 +25,7 @@ const Meeting = require('google-meet-api').meet;
 
 
 
-const {loginUser,preinit,getAllUsers,checkEmailExists,createUser,editEvent, getEventsList,addNewEvent,editClient, getClientsList, addNewClient,dropMeetingEvents,addMeetingEvent,addGlossaryTerm,editGlossaryTerm,deleteGlossaryTerm,getTermById,getTermsList} = require('../controllers/auth');
+const {loginUser,preinit,getAllUsers,checkEmailExists,createSrutisUser,createUser,editEvent, getEventsList,addNewEvent,editClient, getClientsList, addNewClient,dropMeetingEvents,addMeetingEvent,addGlossaryTerm,editGlossaryTerm,deleteGlossaryTerm,getTermById,getTermsList} = require('../controllers/auth');
  
 
 const router = express.Router();
@@ -57,6 +57,10 @@ router.post('/getTermById',function(req, res,next){
 
 router.post('/createUser',function(req, res,next){
      createUser(req, res,next);
+} );
+
+router.post('/createSrutisUser',function(req, res,next){
+     createSrutisUser(req, res,next);
 } );
 
 router.post('/getClientsList', async function(req, res,next){
