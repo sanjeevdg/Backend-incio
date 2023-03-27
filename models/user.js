@@ -15,7 +15,7 @@ const User = sequelize.define('users', {
    },
       fireb_uid: {
       type: Sequelize.STRING,
-      allowNull: false,
+      allowNull: true,
    },
 	 email  : {
       type: Sequelize.STRING,
