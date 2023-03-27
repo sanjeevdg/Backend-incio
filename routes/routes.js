@@ -25,7 +25,7 @@ const Meeting = require('google-meet-api').meet;
 
 
 
-const {preinit,getAllUsers,checkEmailExists,createUser,editEvent, getEventsList,addNewEvent,editClient, getClientsList, addNewClient,dropMeetingEvents,addMeetingEvent,addGlossaryTerm,editGlossaryTerm,deleteGlossaryTerm,getTermById,getTermsList} = require('../controllers/auth');
+const {loginUser,preinit,getAllUsers,checkEmailExists,createUser,editEvent, getEventsList,addNewEvent,editClient, getClientsList, addNewClient,dropMeetingEvents,addMeetingEvent,addGlossaryTerm,editGlossaryTerm,deleteGlossaryTerm,getTermById,getTermsList} = require('../controllers/auth');
  
 
 const router = express.Router();
@@ -37,6 +37,10 @@ router.post('/uploadProfileImage', upload.single('file'), function (req, res) {
   res.json({'message':'ok'})
 });
 
+
+router.post('/loginUser',function(req, res,next){
+     checkEmailExists(req, res,next);
+} );
 
 
 router.post('/checkEmailExists',function(req, res,next){
