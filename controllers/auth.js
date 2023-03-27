@@ -437,8 +437,57 @@ const createUser = (req, res, next) => {
         console.log('error', err);
     });
 };
+const createSrutisUser = (req, res, next) => {
+    // checks if email already exists
+    //'san@san.com'
+     console.log('entering method fndOne::::::::::::::');
+    User.findOne({ where : {
+        email:req.body.email, 
+    }})
+    .then(dbUser => {
+        console.log('entered then clause.................');
+        if (dbUser) {
+            console.log('this is email already exists message after querying db');
+                        
+            
+            
+            
+          //  return res.status(409).json({message: "email already exists"});
+        } else if (!dbUser && req.body.email && req.body.password) {
+            // password hash
+       console.log('attemoting to hash password');
+            
+            bcrypt.hash(req.body.password, 12, (err, passwordHash) => {
+                if (err) {
+                    return res.status(500).json({message: "couldnt hash the password"}); 
+                } else if (passwordHash) {
+                    return User.create(({
+                        email: req.body.email,
+                        name: req.body.name,
+                        password: passwordHash,
+                        regtoken:req.body.regtoken,                      
+                    }))
+                    .then(() => {
+                        res.status(200).json({message: "user created"});
+                    })
+                    .catch(err => {
+                        console.log('signup error message is:::::'+err);
+                        res.status(502).json({message: "error while creating the user"});
+                    });
+                };
+            });
+        } else if (!req.body.password) {
+            return res.status(400).json({message: "password not provided"});
+        } else if (!req.body.email) {
+            return res.status(400).json({message: "email not provided"});
+        };
+    })
+    .catch(err => {
+        console.log('error', err);
+    });
+};
 
 
 
 
-module.exports = {loginUser,getAllUsers,checkEmailExists,createUser,editEvent,getEventsList,addNewEvent,editClient, addNewClient,dropMeetingEvents,addMeetingEvent,addGlossaryTerm,deleteGlossaryTerm, getTermById,getClientsList} ;
+module.exports = {loginUser,getAllUsers,checkEmailExists,createSrutisUser,createUser,editEvent,getEventsList,addNewEvent,editClient, addNewClient,dropMeetingEvents,addMeetingEvent,addGlossaryTerm,deleteGlossaryTerm, getTermById,getClientsList} ;
