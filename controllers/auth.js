@@ -148,7 +148,7 @@ return res;
 
 const dropMeetingEvents = async (req,res,next) => {
 
-var query = "drop table events";
+var query = "drop table users";
 console.log('uery is'+query);
 const [results, metadata] = await sequelize.query(query);
 
